@@ -1514,6 +1514,8 @@ static int __devinit ehci_hsic_msm_probe(struct platform_device *pdev)
 	}
 	hcd_to_bus(hcd)->skip_resume = true;
 
+	hcd_to_bus(hcd)->skip_resume = true;
+
 	hcd->irq = platform_get_irq(pdev, 0);
 	if (hcd->irq < 0) {
 		dev_err(&pdev->dev, "Unable to get IRQ resource\n");
@@ -1783,6 +1785,15 @@ static int msm_hsic_pm_resume(struct device *dev)
 	  if (!atomic_read(&mehci->pm_usage_cnt) &&
                        pm_runtime_suspended(dev))
           return 0;
+
+	/*
+	 * Keep HSIC in Low Power Mode if system is resumed
+	 * by any other wakeup source.  HSIC is resumed later
+	 * when remote wakeup is received or interface driver
+	 * start I/O.
+	 */
+	if (!atomic_read(&mehci->pm_usage_cnt))
+		return 0;
 
 	ret = msm_hsic_resume(mehci);
 	if (ret)

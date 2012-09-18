@@ -1401,6 +1401,8 @@ int usb_suspend(struct device *dev, pm_message_t msg)
       	return -EBUSY;
     	}
  	 }
+	if (udev->bus->skip_resume && udev->state == USB_STATE_SUSPENDED)
+		return 0;
 
 	unbind_no_pm_drivers_interfaces(udev);
 
