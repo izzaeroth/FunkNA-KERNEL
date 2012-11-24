@@ -240,6 +240,10 @@ enum {
 	SX150X_EPM,
 };
 
+#ifdef CONFIG_CPU_FREQ_GOV_INTELLIDEMAND 
+int id_set_two_phase_freq(int cpufreq);
+#endif
+
 static unsigned msm_contig_mem_size = MSM_CONTIG_MEM_SIZE;
 #ifdef CONFIG_KERNEL_MSM_CONTIG_MEM_REGION
 static int __init msm_contig_mem_size_setup(char *p)
@@ -5464,6 +5468,11 @@ static void __init m7_cdp_init(void)
         platform_add_devices(apq8064_footswitch, apq8064_num_footswitch);
 #ifdef CONFIG_MSM_CAMERA
 	m7_init_cam();
+#endif
+
+#ifdef CONFIG_CPU_FREQ_GOV_INTELLIDEMAND
+        if(!cpu_is_krait_v1())
+                id_set_two_phase_freq(1134000);
 #endif
 
 	if (!(board_mfg_mode() == 6 || board_mfg_mode() == 7))
