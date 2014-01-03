@@ -166,27 +166,6 @@ config CPU_FREQ_GOV_ONDEMAND
 
 	  If in doubt, say N.
 
-config CPU_FREQ_GOV_ONDEMANDCRP
-	tristate "'ondemandCRP' cpufreq policy governor"
-	select CPU_FREQ_TABLE
-	help
-	  'ondemandCRP' - This driver adds a dynamic cpufreq policy governor.
-	  The governor does a periodic polling and 
-	  changes frequency based on the CPU utilization.
-	  The support for this governor depends on CPU capability to
-	  do fast frequency switching (i.e, very low latency frequency
-	  transitions). 
-
-	  It is a copy of ondemand which is renamed to stop the CM
-	  Power HAL from screwing with it.
-
-	  To compile this driver as a module, choose M here: the
-	  module will be called cpufreq_ondemand.
-
-	  For details, take a look at linux/Documentation/cpu-freq.
-
-	  If in doubt, say N.
-
 config CPU_FREQ_GOV_INTERACTIVE
 	tristate "'interactive' cpufreq policy governor"
 	help
