@@ -334,6 +334,9 @@ static s32 wl_notify_escan_complete(struct wl_priv *wl,
 static s32 wl_cfg80211_tdls_oper(struct wiphy *wiphy, struct net_device *dev,
 	u8 *peer, enum nl80211_tdls_operation oper);
 #endif /* LINUX_VERSION_CODE > KERNEL_VERSION(3, 2, 0) */
+#ifdef WL_SCHED_SCAN
+static int wl_cfg80211_sched_scan_stop(struct wiphy *wiphy, struct net_device *dev);
+#endif
 
 /*
  * event & event Q handlers for cfg80211 interfaces
@@ -3095,6 +3098,9 @@ wl_cfg80211_connect(struct wiphy *wiphy, struct net_device *dev,
 	wl_extjoin_params_t *ext_join_params;
 	struct wl_join_params join_params;
 	size_t join_params_size;
+#if defined(ROAM_ENABLE) && defined(ROAM_AP_ENV_DETECTION)
+	dhd_pub_t *dhd =  (dhd_pub_t *)(wl->pub);
+#endif /* ROAM_AP_ENV_DETECTION */
 	s32 err = 0;
 	wpa_ie_fixed_t *wpa_ie;
 	bcm_tlv_t *wpa2_ie;
@@ -3127,6 +3133,11 @@ wl_cfg80211_connect(struct wiphy *wiphy, struct net_device *dev,
 #if !defined(ESCAN_RESULT_PATCH)
 	if (wl->scan_request) {
 		wl_notify_escan_complete(wl, dev, true, true);
+	}
+#endif
+#ifdef WL_SCHED_SCAN
+	if (wl->sched_scan_req) {
+		wl_cfg80211_sched_scan_stop(wiphy, wl_to_prmry_ndev(wl));
 	}
 #endif
 #if defined(ESCAN_RESULT_PATCH)
@@ -3222,6 +3233,17 @@ wl_cfg80211_connect(struct wiphy *wiphy, struct net_device *dev,
 			return err;
 		}
 	}
+#if defined(ROAM_ENABLE) && defined(ROAM_AP_ENV_DETECTION)
+	if (dhd->roam_env_detection && (wldev_iovar_setint(dev, "roam_env_detection",
+		AP_ENV_DETECT_NOT_USED) == BCME_OK)) {
+		s32 roam_trigger[2] = {WL_AUTO_ROAM_TRIGGER, WLC_BAND_ALL};
+		err = wldev_ioctl(dev, WLC_SET_ROAM_TRIGGER, roam_trigger,
+			sizeof(roam_trigger), true);
+		if (unlikely(err)) {
+			WL_ERR((" failed to restore roam_trigger for auto env detection\n"));
+		}
+	}
+#endif /* ROAM_AP_ENV_DETECTION */
 	if (chan) {
 		wl->channel = ieee80211_frequency_to_channel(chan->center_freq);
 		chan_cnt = 1;
@@ -3456,7 +3478,8 @@ wl_cfg80211_set_tx_power(struct wiphy *wiphy,
 #ifdef SUPPORT_WL_TXPOWER
 	if (type == NL80211_TX_POWER_AUTOMATIC)
 		txpwrqdbm = 127;
-	txpwrqdbm |= WL_TXPWR_OVERRIDE;
+	else
+		txpwrqdbm |= WL_TXPWR_OVERRIDE;
 #endif /* SUPPORT_WL_TXPOWER */
 	err = wldev_iovar_setint(ndev, "qtxpower", txpwrqdbm);
 	if (unlikely(err)) {
@@ -6099,6 +6122,13 @@ wl_cfg80211_stop_ap(
 		wl_clr_drv_status(wl, AP_CREATED, dev);
 		/* Turn on the MPC */
 		wldev_iovar_setint(dev, "mpc", 1);
+		if (wl->ap_info) {
+			kfree(wl->ap_info->wpa_ie);
+			kfree(wl->ap_info->rsn_ie);
+			kfree(wl->ap_info->wps_ie);
+			kfree(wl->ap_info);
+			wl->ap_info = NULL;
+		}
 	} else {
 		WL_DBG(("Stopping P2P GO \n"));
 		DHD_OS_WAKE_LOCK_CTRL_TIMEOUT_ENABLE((dhd_pub_t *)(wl->pub), DHD_EVENT_TIMEOUT_MS*3);
@@ -6302,7 +6332,8 @@ fail:
 #define PNO_TIME		30
 #define PNO_REPEAT		4
 #define PNO_FREQ_EXPO_MAX	2
-int wl_cfg80211_sched_scan_start(struct wiphy *wiphy,
+static int
+wl_cfg80211_sched_scan_start(struct wiphy *wiphy,
                              struct net_device *dev,
                              struct cfg80211_sched_scan_request *request)
 {
@@ -6366,7 +6397,8 @@ int wl_cfg80211_sched_scan_start(struct wiphy *wiphy,
 	return 0;
 }
 
-int wl_cfg80211_sched_scan_stop(struct wiphy *wiphy, struct net_device *dev)
+static int
+wl_cfg80211_sched_scan_stop(struct wiphy *wiphy, struct net_device *dev)
 {
 	struct wl_priv *wl = wiphy_priv(wiphy);
 
@@ -7494,6 +7526,9 @@ wl_bss_connect_done(struct wl_priv *wl, struct net_device *ndev,
 {
 	struct wl_connect_info *conn_info = wl_to_conn(wl);
 	struct wl_security *sec = wl_read_prof(wl, ndev, WL_PROF_SEC);
+#if defined(ROAM_ENABLE) && defined(ROAM_AP_ENV_DETECTION)
+	dhd_pub_t *dhd =  (dhd_pub_t *)(wl->pub);
+#endif /* ROAM_AP_ENV_DETECTION */
 	s32 err = 0;
 	u8 *curbssid = wl_read_prof(wl, ndev, WL_PROF_BSSID);
 	if (!sec) {
@@ -7530,6 +7565,11 @@ wl_bss_connect_done(struct wl_priv *wl, struct net_device *ndev,
 			wl_update_bss_info(wl, ndev);
 			wl_update_pmklist(ndev, wl->pmk_list, err);
 			wl_set_drv_status(wl, CONNECTED, ndev);
+#if defined(ROAM_ENABLE) && defined(ROAM_AP_ENV_DETECTION)
+			if (dhd->roam_env_detection)
+				wldev_iovar_setint(ndev, "roam_env_detection",
+					AP_ENV_INDETERMINATE);
+#endif /* ROAM_AP_ENV_DETECTION */
 			if (ndev != wl_to_prmry_ndev(wl)) {
 				/* reinitialize completion to clear previous count */
 				INIT_COMPLETION(wl->iface_disable);
@@ -8014,6 +8054,7 @@ wl_notify_sched_scan_results(struct wl_priv *wl, struct net_device *ndev,
 				wl_clr_drv_status(wl, SCANNING, ndev);
 				goto out_err;
 			}
+			p2p_scan(wl) = false;
 		}
 
 		wl_set_drv_status(wl, SCANNING, ndev);
@@ -10532,33 +10573,41 @@ wl_cfg80211_tdls_oper(struct wiphy *wiphy, struct net_device *dev,
 #ifdef WLTDLS
 	struct wl_priv *wl = wlcfg_drv_priv;
 	tdls_iovar_t info;
-	dhd_pub_t *dhd = (dhd_pub_t *)(wl->pub);
-
 	memset(&info, 0, sizeof(tdls_iovar_t));
 	if (peer)
 		memcpy(&info.ea, peer, ETHER_ADDR_LEN);
 	switch (oper) {
 	case NL80211_TDLS_DISCOVERY_REQ:
-		if (!dhd->tdls_enable)
-			ret = dhd_tdls_enable_disable(dhd, 1);
+		/* turn on TDLS */
+		ret = dhd_tdls_enable(dev, true, false, NULL);
 		if (ret < 0)
 			return ret;
 		info.mode = TDLS_MANUAL_EP_DISCOVERY;
 		break;
 	case NL80211_TDLS_SETUP:
-		info.mode = TDLS_MANUAL_EP_CREATE;
+		/* auto mode on */
+		ret = dhd_tdls_enable(dev, true, true, (struct ether_addr *)peer);
+		if (ret < 0)
+			return ret;
 		break;
 	case NL80211_TDLS_TEARDOWN:
 		info.mode = TDLS_MANUAL_EP_DELETE;
+		/* auto mode off */
+		ret = dhd_tdls_enable(dev, true, false, (struct ether_addr *)peer);
+		if (ret < 0)
+			return ret;
 		break;
 	default:
 		WL_ERR(("Unsupported operation : %d\n", oper));
 		goto out;
 	}
-	ret = wldev_iovar_setbuf(dev, "tdls_endpoint", &info, sizeof(info),
-		wl->ioctl_buf, WLC_IOCTL_MAXLEN, &wl->ioctl_buf_sync);
-	if (ret) {
-		WL_ERR(("tdls_endpoint error %d\n", ret));
+
+	if (info.mode) {
+		ret = wldev_iovar_setbuf(dev, "tdls_endpoint", &info, sizeof(info),
+			wl->ioctl_buf, WLC_IOCTL_MAXLEN, &wl->ioctl_buf_sync);
+		if (ret) {
+			WL_ERR(("tdls_endpoint error %d\n", ret));
+		}
 	}
 out:
 #endif /* WLTDLS */
@@ -10577,8 +10626,12 @@ s32 wl_cfg80211_set_wps_p2p_ie(struct net_device *net, char *buf, int len,
 	s32 pktflag = 0;
 	wl = wlcfg_drv_priv;
 
-	if (wl_get_drv_status(wl, AP_CREATING, net) ||
-		wl_get_drv_status(wl, AP_CREATED, net)) {
+	if (wl_get_drv_status(wl, AP_CREATING, net)) {
+		/* Vendor IEs should be set to FW
+		 * after SoftAP interface is brought up
+		 */
+		goto exit;
+	} else if (wl_get_drv_status(wl, AP_CREATED, net)) {
 		ndev = net;
 		bssidx = 0;
 	} else if (wl->p2p) {
