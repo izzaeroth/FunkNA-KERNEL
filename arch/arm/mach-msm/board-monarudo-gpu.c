@@ -178,7 +178,6 @@ static struct msm_bus_vectors grp3d_max_vectors[] = {
 		.ib = KGSL_CONVERT_TO_MBPS(4264),
 	},
 };
-#endif
 
 static struct msm_bus_paths grp3d_bus_scale_usecases[] = {
 	{
