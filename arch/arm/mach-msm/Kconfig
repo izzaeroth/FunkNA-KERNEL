@@ -1670,13 +1670,7 @@ config GPU_OVERCLOCK
 	bool "Enable GPU Overclocking option"
 	default n
 	help
-	  Krait 600 GPU overclocking
-
-config GPU_OVERCLOCK_450
-	bool "Enable special GPU Overclocking option"
-	depends on GPU_OVERCLOCK
-	default n
-	help 
+	  Krait 600 GPU overclocking 
 
 config MSM_CPU_FREQ_SET_DEFAULT_MIN_MAX
 	bool "Set Default Min/Max CPU frequencies."
