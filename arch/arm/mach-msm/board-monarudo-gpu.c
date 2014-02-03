@@ -291,7 +291,7 @@ static int __init read_max_gpu(char *gpu_oc)
 	return 0;
 }
 
-__setup("gpu_oc=", read_max_gpu);
+__setup("ocG=", read_max_gpu);
 /*end gpuoc*/
 
 void __init apq8064_init_gpu(void)
