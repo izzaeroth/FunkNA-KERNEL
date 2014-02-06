@@ -1073,10 +1073,10 @@ config HTC_ONMODE_CHARGING
 		support on mode charing icon
 
 config BUILD_EDIAG
-        bool "Build in embedded diag fixes"
-        default n
-        help
-          For embedded diag we need to do some additional fixes.
+	bool "Build in embedded diag fixes"
+	default n
+	help
+	  For embedded diag we need to do some additional fixes.
 
 config HTC_FD_MONITOR
 	bool "fd operation monitor mechanism"
@@ -2801,17 +2801,4 @@ config FORCE_FAST_CHARGE
 	help
   	  A simple sysfs interface to force adapters that
 	  are detected as USB to charge as AC.
-
-config UPDATE_LCDC_LUT
-        bool "Set initial Qualcomm LCDC lut"
-        default n
-        help
-          Set initial Qualcomm LCDC Look Up Table.
-
-config LCD_KCAL
-        tristate "MSM generic LCDC Calibration"
-        default n
-        help
-          Enable MSM generic LCDC temperature Calibration.
-
 endif
