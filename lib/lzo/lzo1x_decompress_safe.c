@@ -24,7 +24,6 @@
 #define HAVE_OP(x, op_end, op) ((size_t)(op_end - op) < (x))
 #define HAVE_LB(m_pos, out, op) (m_pos < out || m_pos >= op)
 
-#undef COPY4 /*why do I have to do this?*/
 #define COPY4(dst, src)	\
 		put_unaligned(get_unaligned((const u32 *)(src)), (u32 *)(dst))
 
