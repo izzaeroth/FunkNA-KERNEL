@@ -173,7 +173,7 @@ config CPU_FREQ_GOV_SMARTASSV2
 
 config SMARTASSV2_SLEEP_IDEAL_FREQ
 	int "The ideal frequency to use when awake."
-	default 768000
+	default 810000
 	depends on CPU_FREQ_GOV_SMARTASSV2
 	help
 	  The "ideal" frequency to use when awake. The governor will ramp up faster
@@ -182,7 +182,7 @@ config SMARTASSV2_SLEEP_IDEAL_FREQ
 
 config SMARTASSV2_AWAKE_IDEAL_FREQ
 	int "The ideal frequency to use when suspended."
-	default 192000
+	default 162000
 	depends on CPU_FREQ_GOV_SMARTASSV2
 	help
 	  The "ideal" frequency to use when suspended.
@@ -192,7 +192,7 @@ config SMARTASSV2_AWAKE_IDEAL_FREQ
 
 config SMARTASSV2_RAMP_UP_STEP
 	int "Freqeuncy delta when ramping up above the ideal freqeuncy."
-	default 256000
+	default 270000
 	depends on CPU_FREQ_GOV_SMARTASSV2
 	help
 	  Freqeuncy delta when ramping up above the ideal freqeuncy.
@@ -201,7 +201,7 @@ config SMARTASSV2_RAMP_UP_STEP
 
 config SMARTASSV2_RAMP_DOWN_STEP
 	int "Freqeuncy delta when ramping down below the ideal freqeuncy."
-	default 256000
+	default 270000
 	depends on CPU_FREQ_GOV_SMARTASSV2
 	help
 	  Freqeuncy delta when ramping down below the ideal freqeuncy.
@@ -294,7 +294,7 @@ config CPU_FREQ_GOV_BADASS_3_PHASE
 
 config CPU_FREQ_GOV_BADASS_3_PHASE_FREQ
 	int "'3-phase' badass frequency"
-	default 1188000
+	default 1134000
 	depends on CPU_FREQ_GOV_BADASS
 	depends on CPU_FREQ_GOV_BADASS_2_PHASE
 	depends on CPU_FREQ_GOV_BADASS_3_PHASE
@@ -353,7 +353,7 @@ config LAGFREE_MIN_LOAD
 
 config LAGFREE_FREQ_STEP_DOWN
 	int "Frequency Step Down"
-	default 108000
+	default 270000
 	depends on CPU_FREQ_GOV_LAGFREE
 	help
 	  Max freqeuncy delta when ramping down.
