@@ -97,7 +97,7 @@ static unsigned int saved_policy_min;
 
 static unsigned int eco_mode_active = 0;
 
-static void do_dbs_timer(struct work_struct *work);
+static void __cpuinit do_dbs_timer(struct work_struct *work);
 static int cpufreq_governor_dbs(struct cpufreq_policy *policy,
 				unsigned int event);
 
@@ -1397,7 +1397,7 @@ static unsigned int calculate_thread_stats(void)
 static unsigned int persist_count = 0;
 static unsigned int rq_persist_count = 0;
 
-static void do_dbs_timer(struct work_struct *work)
+static void __cpuinit do_dbs_timer(struct work_struct *work)
 {
 	struct cpu_dbs_info_s *dbs_info =
 		container_of(work, struct cpu_dbs_info_s, work.work);
