@@ -20,9 +20,7 @@ then
 		    gpufreq=550000000
 		else
 	    	    gpufreq=400000000
-		fi
-	else
-	    gpufreq=400000000
+	    fi
     	fi
     fi
 else
