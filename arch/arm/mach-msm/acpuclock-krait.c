@@ -67,6 +67,9 @@ static void set_acpuclk_L2_freq_foot_print(unsigned khz)
 
 #define SECCLKAGD		BIT(4)
 
+int pvs_number = 0;
+module_param(pvs_number, int, 0755); 
+
 static DEFINE_MUTEX(driver_lock);
 static DEFINE_SPINLOCK(l2_lock);
 
@@ -1084,6 +1087,8 @@ static int __init get_pvs_bin(u32 pte_efuse)
 	} else {
 		dev_info(drv.dev, "ACPU PVS: %d\n", pvs_bin);
 	}
+	
+	pvs_number = pvs_bin;
 
 	return pvs_bin;
 }
