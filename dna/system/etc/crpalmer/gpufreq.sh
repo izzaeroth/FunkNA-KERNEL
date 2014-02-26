@@ -18,9 +18,9 @@ then
 	        then
 		    gpufreq=500000000
 		    else
-	        	if [ "$value" = "550" ]
+	        	if [ "$value" = "533" ]
 	        	then
-			    gpufreq=550000000
+			    gpufreq=533000000
 			else
 		    	    gpufreq=400000000
 		    fi
