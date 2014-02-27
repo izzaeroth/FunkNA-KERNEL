@@ -11,7 +11,7 @@ then
 	then
     	value="`head -1 $F`"
 	    if [ "$value" = "1" ]
-    	then
+    		then
 		enabled=1
 		eco=0
 		echo "intelliplug is enabled"
