@@ -14,13 +14,19 @@ then
     	then
 		enabled=1
 		eco=0
+		echo "intelliplug is enabled"
+		echo "eco mode is disabled"
 		elif [ "$value" = "eco" ]
 		then
 		enabled=1
 		eco=1
+		echo "intelliplug is enabled"
+		echo "eco mode is enabled"
 		else
 		enabled=0
 		eco=0
+		echo "intelliplug is disabled"
+		echo "eco mode is disabled"
 		fi
 	fi
 
