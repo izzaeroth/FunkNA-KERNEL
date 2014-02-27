@@ -4,7 +4,8 @@ VDD=/sys/devices/system/cpu/cpufreq/vdd_table/vdd_levels
 F=/sdcard/jamiethemorris-pvs
 if grep jamiethemorris /proc/version > /dev/null
 then
-
+#Get PVS number
+#PVS="`cat /sys/module/acpuclock_krait/parameters/pvs_number`"
 	if [ -r $F ]
 	then
 	     pvs=`head -1 $F`
