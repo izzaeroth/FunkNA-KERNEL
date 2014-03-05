@@ -1,4 +1,4 @@
-msm_bus_paths bw_level_tblmsm_bus_paths bw_level_tbl/*
+/*
  * Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
