@@ -1579,9 +1579,6 @@ static long qseecom_ioctl(struct file *file, unsigned cmd,
 		ret = qsee_vote_for_clock(CLK_DFAB);
 		if (ret)
 			pr_err("Failed to vote for DFAB clock%d\n", ret);
-		ret = qsee_vote_for_clock(CLK_SFPB);
-		if (ret)
-			pr_err("Failed to vote for SFPB clock%d\n", ret);
 		atomic_dec(&data->ioctl_count);
 		break;
 	}
@@ -1589,7 +1586,6 @@ static long qseecom_ioctl(struct file *file, unsigned cmd,
 		pr_debug("ioctl perf_disable_req()\n");
 		atomic_inc(&data->ioctl_count);
 		qsee_disable_clock_vote(CLK_DFAB);
-		qsee_disable_clock_vote(CLK_SFPB);
 		atomic_dec(&data->ioctl_count);
 		break;
 	}
