@@ -84,7 +84,7 @@ static int current_blink = 0;
 //static int lut_coefficient = 100;
 //static int dutys_array[64];
 
-static int blink_buttons = 1;
+static int blink_buttons = 0;
 
 u8 pm8xxxx_led_pwm_mode(int flag)
 {
@@ -442,7 +442,7 @@ static void led_blink_do_work(struct work_struct *work)
 }
 
 
-static ssize_t pm8xxx_blink_buttons_show(struct device *dev,
+/*static ssize_t pm8xxx_blink_buttons_show(struct device *dev,
 					struct device_attribute *attr,
 					char *buf)
 {
@@ -463,7 +463,7 @@ static ssize_t pm8xxx_blink_buttons_store(struct device *dev,
 }
 
 static DEVICE_ATTR(blink_buttons, 0644, pm8xxx_blink_buttons_show, pm8xxx_blink_buttons_store);
-
+*/
 
 static ssize_t pm8xxx_led_blink_show(struct device *dev,
 					struct device_attribute *attr,
@@ -818,7 +818,7 @@ static int __devinit pm8xxx_led_probe(struct platform_device *pdev)
 		}
 		
 		// blink buttons
-		if (led_dat->id == PM8XXX_ID_LED_0)
+		/*if (led_dat->id == PM8XXX_ID_LED_0)
 		{
 			// storing buttons light dev for blinking
 			led_cdev_buttons = &led_dat->cdev;
@@ -827,7 +827,7 @@ static int __devinit pm8xxx_led_probe(struct platform_device *pdev)
 				LED_ERR("%s: Failed to create %d attr currents\n", __func__, i);
 				goto err_register_attr_currents;
 			}
-		}
+		}*/
 		// blink buttons end
 		
 		if (led_dat->id >= PM8XXX_ID_LED_2 && led_dat->id <= PM8XXX_ID_LED_0) {
