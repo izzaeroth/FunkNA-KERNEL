@@ -9,7 +9,7 @@ then
 	then
     	value="`head -1 $F`"
 	    echo "$value" > $IO
-	    ioset="`head -1 $IO`"
+	    ioset="`head -1 $F`"
 	    echo "setting io scheduler to $ioset"
 	else "not setting io scheduler"
 	fi
