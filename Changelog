@@ -8,7 +8,7 @@ Changelog
 -Decrease GPU OC to 533 MHz and increase bandwidth
 -1917 MHz overclock is back, should be more stable now
 -Sweep2wake + Sweep2Sleep
--Doubletap2sleep is not implemented in this version, sorry. I plan on adding it back though.
+-Doubletap2sleep is not implemented in this version, sorry. Use your ROM's dt2s feature for now. I do plan on adding this back.
 -Doubletap2wake can be used anywhere on the screen
 -There should be scripts for all features, let me know if I missed something.
 -Undervolt override for high overclocks. You can globally undervolt while leaving 1836 MHz, 1890 MHz, and 1917 MHz clocks unaffected.
