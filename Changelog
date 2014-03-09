@@ -1,17 +1,18 @@
 Changelog
 
 5.5.5
--Dynamic Fsync (Enable this only if you are sure your device is stable
--Simple GPU Governor (experimental, may be unstable)
--Intelliplug hotplug driver with Eco mode (dual core operations)
--Intellidemand tweaks
--Decrease GPU OC to 533 MHz
+-Dynamic Fsync (Enable this only if you are sure your device is stable! If you have too many reboots, your data may get corrupted and you will have to reflash your ROM.)
+-Simple GPU Governor
+-Intelliplug hotplug driver with Eco mode (dual core operations). When this is disabled, it will use crpalmer's hot-plug driver.
+-Intellidemand tweaks - I'm still working on this one, it tends to have random reboots at the moment.
+-Decrease GPU OC to 533 MHz and increase bandwidth
 -1917 MHz overclock is back, should be more stable now
--Sweep2wake
--Doubletap2sleep is not implemented in this version
--Doubletap2wake can be done anywhere on the screen
+-Sweep2wake + Sweep2Sleep
+-Doubletap2sleep is not implemented in this version, sorry. I plan on adding it back though.
+-Doubletap2wake can be used anywhere on the screen
 -There should be scripts for all features, let me know if I missed something.
 -Undervolt override for high overclocks. You can globally undervolt while leaving 1836 MHz, 1890 MHz, and 1917 MHz clocks unaffected.
 -L2 cache overclock
 -600 MHz bus overclock for 1674 MHz - 1917 MHz frequencies
--Ignore the backlight notifications/blinking buttons option in trickstermod, it doesn't work. Not sure why yet.
+-Support for F2FS filesystem (F2FS TWRP and MultiROM are coming as well, as soon as I have time to test)
+-FIOPS I/O Scheduler
