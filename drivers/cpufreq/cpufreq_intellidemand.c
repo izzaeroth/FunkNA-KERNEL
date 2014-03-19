@@ -355,12 +355,16 @@ show_one(two_phase_freq, two_phase_freq);
 
 #ifdef CONFIG_CPUFREQ_LIMIT_MAX_FREQ 
 void set_lmf_browsing_state(bool onOff);
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 void set_lmf_active_max_freq(unsigned long freq);
+#endif
 void set_lmf_inactive_max_freq(unsigned long freq);
 void set_lmf_active_load(unsigned long freq);
 void set_lmf_inactive_load(unsigned long freq);
 bool get_lmf_browsing_state(void);
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 unsigned long get_lmf_active_max_freq(void);
+#endif
 unsigned long get_lmf_inactive_max_freq(void);
 unsigned long get_lmf_active_load(void);
 unsigned long get_lmf_inactive_load(void);
@@ -370,13 +374,13 @@ static ssize_t show_lmf_browser(struct kobject *kobj,
 {
 	return sprintf(buf, "%u\n", get_lmf_browsing_state());
 }
-
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 static ssize_t show_lmf_active_max_freq(struct kobject *kobj,
 				      struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%ld\n", get_lmf_active_max_freq());
 }
-
+#endif
 static ssize_t show_lmf_inactive_max_freq(struct kobject *kobj,
 				      struct attribute *attr, char *buf)
 {
@@ -817,6 +821,7 @@ static ssize_t store_lmf_browser(struct kobject *a, struct attribute *b,
 	return count;
 }
 
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 static ssize_t store_lmf_active_max_freq(struct kobject *a, struct attribute *b,
 				   const char *buf, size_t count)
 {
@@ -833,6 +838,8 @@ static ssize_t store_lmf_active_max_freq(struct kobject *a, struct attribute *b,
 
 	return count;
 }
+#endif
+
 static ssize_t store_lmf_inactive_max_freq(struct kobject *a, struct attribute *b,
 				   const char *buf, size_t count)
 {
@@ -903,7 +910,9 @@ define_one_global_rw(two_phase_freq);
 
 #ifdef CONFIG_CPUFREQ_LIMIT_MAX_FREQ
 define_one_global_rw(lmf_browser);
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 define_one_global_rw(lmf_active_max_freq);
+#endif
 define_one_global_rw(lmf_inactive_max_freq);
 define_one_global_rw(lmf_active_load);
 define_one_global_rw(lmf_inactive_load);
@@ -928,7 +937,9 @@ static struct attribute *dbs_attributes[] = {
 	&two_phase_freq.attr,
 #ifdef CONFIG_CPUFREQ_LIMIT_MAX_FREQ
 	&lmf_browser.attr,
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 	&lmf_active_max_freq.attr,
+#endif
 	&lmf_inactive_max_freq.attr,
 	&lmf_active_load.attr,
 	&lmf_inactive_load.attr,
@@ -1239,7 +1250,11 @@ enum {
 #define INACTIVE_DURATION_MSEC	(1*60*1000) // 1 mins
 #define MAX_ACTIVE_FREQ_LIMIT	30 // %
 #define MAX_INACTIVE_FREQ_LIMIT	20 // %
+
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 #define ACTIVE_MAX_FREQ		CONFIG_INTELLI_MAX_ACTIVE_FREQ		// 1.512GHZ
+#endif
+
 #define INACTIVE_MAX_FREQ	CONFIG_INTELLI_MAX_INACTIVE_FREQ	// 1.134GHZ
 
 #define NUM_ACTIVE_LOAD_ARRAY	(ACTIVE_DURATION_MSEC/SAMPLE_DURATION_MSEC)
@@ -1248,7 +1263,10 @@ enum {
 bool lmf_browsing_state = true;
 bool lmf_screen_state = true;
 
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 static unsigned long lmf_active_max_limit = ACTIVE_MAX_FREQ;
+#endif
+
 static unsigned long lmf_inactive_max_limit = INACTIVE_MAX_FREQ;
 static unsigned long lmf_active_load_limit = MAX_ACTIVE_FREQ_LIMIT;
 static unsigned long lmf_inactive_load_limit = MAX_INACTIVE_FREQ_LIMIT;
@@ -1275,10 +1293,12 @@ void set_lmf_browsing_state(bool onOff)
 		lmf_browsing_state = false;
 }
 
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 void set_lmf_active_max_freq(unsigned long freq)
 {
 	lmf_active_max_limit = freq;
 }
+#endif
 
 void set_lmf_inactive_max_freq(unsigned long freq)
 {
@@ -1300,10 +1320,12 @@ bool get_lmf_browsing_state(void)
 	return lmf_browsing_state;
 }
 
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 unsigned long get_lmf_active_max_freq(void)
 {
 	return lmf_active_max_limit;
 }
+#endif
 
 unsigned long get_lmf_inactive_max_freq(void)
 {
@@ -1362,6 +1384,7 @@ static void __cpuinit do_dbs_timer(struct work_struct *work)
 				lmf_old_state = false;
 			}
 
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 			if (!active_state)
 			{
 				/* set freq to 1.5GHz */
@@ -1381,6 +1404,7 @@ static void __cpuinit do_dbs_timer(struct work_struct *work)
 					cpufreq_set_limits_off(NON_BOOT_CPU3, SET_MAX, lmf_active_max_limit);
 				}
 			}
+#endif
 			
 			jiffies_old = 0;
 			time_int = 0;
@@ -1441,7 +1465,9 @@ static void __cpuinit do_dbs_timer(struct work_struct *work)
 					unsigned long total_load = 0;
 
 					load_total = load_state_total0 + load_state_total1;
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 					ave_max = (time_int / 10) * ((lmf_active_max_limit/1000) * 2);
+#endif
 					average = (load_total * 100) / ave_max;
 					average_dec = (load_total  * 100) % ave_max;
 
@@ -1522,6 +1548,7 @@ static void __cpuinit do_dbs_timer(struct work_struct *work)
 							average_dec = total_load % NUM_INACTIVE_LOAD_ARRAY;
 							pr_warn("LMF:INACTIVE: total_avg = %ld.%ld\n", average, average_dec);
 
+#ifdef CONFIG_CPUFREQ_LIMIT_ACTIVE_FREQ
 							if (average < lmf_inactive_load_limit)
 							{
 								msecs_limit_total = 0;
@@ -1547,6 +1574,8 @@ static void __cpuinit do_dbs_timer(struct work_struct *work)
 
 							}
 							else
+#endif
+
 							{
 								msecs_limit_total = INACTIVE_DURATION_MSEC; // to prevent overflow
 							}
