@@ -29,6 +29,9 @@
 #include <linux/slab.h>
 #include <linux/workqueue.h>
 #include <linux/input.h>
+#ifdef CONFIG_POCKET_DETECT
+#include <linux/input/pocket_detect.h>
+#endif
 #ifndef CONFIG_HAS_EARLYSUSPEND
 #include <linux/lcd_notify.h>
 #else
@@ -59,7 +62,7 @@ MODULE_LICENSE("GPLv2");
 
 #define DT2W_PWRKEY_DUR		60
 #define DT2W_FEATHER		200
-#define DT2W_TIME		700
+#define DT2W_TIME		350
 
 /* Resources */
 int dt2w_switch = DT2W_DEFAULT;
@@ -102,6 +105,12 @@ static void doubletap2wake_reset(void) {
 
 /* PowerKey work func */
 static void doubletap2wake_presspwr(struct work_struct * doubletap2wake_presspwr_work) {
+        int in_pocket = 0;
+#ifdef CONFIG_POCKET_DETECT
+	if (scr_suspended == true)
+			in_pocket = check_pocket();
+#endif
+	if (in_pocket == 0) {
 	if (!mutex_trylock(&pwrkeyworklock))
                 return;
 	input_event(doubletap2wake_pwrdev, EV_KEY, KEY_POWER, 1);
@@ -112,6 +121,7 @@ static void doubletap2wake_presspwr(struct work_struct * doubletap2wake_presspwr
 	msleep(DT2W_PWRKEY_DUR);
         mutex_unlock(&pwrkeyworklock);
 	return;
+	}
 }
 static DECLARE_WORK(doubletap2wake_presspwr_work, doubletap2wake_presspwr);
 
