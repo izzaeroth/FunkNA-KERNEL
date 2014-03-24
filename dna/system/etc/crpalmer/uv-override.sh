@@ -29,9 +29,9 @@ then
 	     echo 1917000 1350000 > $VDD
 	     elif [ "$pvs" = "4" ]
 	     then
-	     echo 1836000 1225000 > $VDD
-	     echo 1890000 1250000 > $VDD
-	     echo 1917000 1350000 > $VDD
+	     echo 1836000 1200000 > $VDD
+	     echo 1890000 1225000 > $VDD
+	     echo 1917000 1275000 > $VDD
 	     elif [ "$pvs" = "?" ]
 	     then
 	     echo 1836000 1262500 > $VDD
