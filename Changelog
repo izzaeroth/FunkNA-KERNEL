@@ -23,3 +23,5 @@ NEXT VERSION (WIP):
 -Disable intellidemand's active max frequency to prevent it from interfering with overclock
 -Enable additional TCP congestion algorithms
 -Sync s2w/dt2w/pocket detection with Beastmode
+-Add Preservative governor (credits to bedalus)
+-Update BFQ I/O Scheduler to v7r2
