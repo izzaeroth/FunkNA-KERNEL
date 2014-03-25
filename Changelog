@@ -16,3 +16,10 @@ Changelog
 -600 MHz bus overclock for 1674 MHz - 1917 MHz frequencies
 -Support for F2FS filesystem (F2FS TWRP and MultiROM are coming as well, as soon as I have time to test)
 -FIOPS I/O Scheduler
+
+NEXT VERSION (WIP):
+-Fix voltage for "faster" binned chips
+-Fixed random reboots when using intellidemand governor
+-Disable intellidemand's active max frequency to prevent it from interfering with overclock
+-Enable additional TCP congestion algorithms
+-Sync s2w/dt2w/pocket detection with Beastmode
