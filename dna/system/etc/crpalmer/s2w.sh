@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-F=/sdcard/jamiethemorris-dt2s
+F=/sdcard/jamiethemorris-s2w
 
 enabled=1
 
@@ -12,13 +12,16 @@ then
 	    if [ "$value" = "1" ]
 	    then
 		enabled=1
-		echo "doubletap2sleep is enabled"
+		echo "sweep2wake is enabled"
 		else
 		enabled=0
-		echo "doubletap2sleep is disabled"
+		echo "sweep2wake is disabled"
 		fi
+	else
+	enabled=1
+	echo "sweep2wake is enabled"
 	fi
 
-	echo $enabled > /sys/android_touch/doubletap2sleep
+	echo $enabled > /sys/android_touch/sweep2wake
 fi
 

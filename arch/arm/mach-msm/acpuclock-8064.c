@@ -1,4 +1,4 @@
-msm_bus_paths bw_level_tblmsm_bus_paths bw_level_tbl/*
+/*
  * Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -270,9 +270,9 @@ static struct acpu_level tbl_faster[] __initdata = {
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14), 1125000 },
 	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1175000 },
 	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1200000 },
-	{ 1, {  1836000, HFPLL, 1, 0x44 }, L2(15), 1225000 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1250000 },
-	{ 1, {  1917000, HFPLL, 1, 0x47 }, L2(15), 1350000 },
+	{ 1, {  1836000, HFPLL, 1, 0x44 }, L2(15), 1200000 },
+	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1225000 },
+	{ 1, {  1917000, HFPLL, 1, 0x47 }, L2(15), 1275000 },
 	{ 0, { 0 } }
 };
 
