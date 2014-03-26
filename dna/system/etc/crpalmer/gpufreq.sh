@@ -26,11 +26,12 @@ then
 		    fi
 	    	fi
 	    fi
+	    echo "setting max GPU frequency to $value MHz"
 	else
 	    gpufreq=400000000
+	    echo "setting max GPU frequency to 400 MHz"
 	fi
 
 	echo $gpufreq > /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk
 	
-	echo "setting max GPU frequency to $value MHz"
 fi
