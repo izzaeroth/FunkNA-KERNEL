@@ -986,6 +986,8 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 
 	this_dbs_info->freq_lo = 0;
 	policy = this_dbs_info->cur_policy;
+		if(policy == NULL)
+		return;
 
 	/* Only core0 controls the boost */
 	if (dbs_tuners_ins.boosted && policy->cpu == 0) {
@@ -1078,6 +1080,8 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 		j_dbs_info->max_load  = max(cur_load, j_dbs_info->prev_load);
 		j_dbs_info->prev_load = cur_load;
 		freq_avg = __cpufreq_driver_getavg(policy, j);
+		if (policy == NULL)
+			return;
 		if (freq_avg <= 0)
 			freq_avg = policy->cur;
 
