@@ -10,7 +10,7 @@ then
 	then
 	     pvs=`head -1 $F`
 	     echo "CPU's pvs is set to $pvs"
-	     echo "overriding uv for 1836 and 1890 MHz"
+	     echo "overriding uv for 1836/1890/1917 MHz"
 	     if [ "$pvs" = "1" ]
 	     then
 	     echo 1836000 1300000 > $VDD
