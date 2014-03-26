@@ -23,7 +23,5 @@ then
 	fi
 
 	echo $enabled > /sys/android_touch/sweep2wake
-	echo 'BACK' > /sys/android_touch/sweep2wake_startbutton
-	echo 'MENU' > /sys/android_touch/sweep2wake_endbutton
 fi
 
