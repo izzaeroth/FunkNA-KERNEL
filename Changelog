@@ -18,10 +18,16 @@ Changelog
 -FIOPS I/O Scheduler
 
 NEXT VERSION (WIP):
--Fix voltage for "faster" binned chips
+-Hopefully fix voltage for "faster" binned chips
 -Fixed random reboots when using intellidemand governor
+-Fix scripts
 -Disable intellidemand's active max frequency to prevent it from interfering with overclock
 -Enable additional TCP congestion algorithms
 -Sync s2w/dt2w/pocket detection with Beastmode
 -Add Preservative governor (credits to bedalus)
 -Update BFQ I/O Scheduler to v7r2
+-Merge latest CM commits
+-Merge crpalmer's latest commits
+-Update to Linux 3.4.79
+-Add LZ4 kernel compression/decompression for faster boot
+
