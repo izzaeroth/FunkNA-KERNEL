@@ -17,7 +17,7 @@ Changelog
 -Support for F2FS filesystem (F2FS TWRP and MultiROM are coming as well, as soon as I have time to test)
 -FIOPS I/O Scheduler
 
-NEXT VERSION (WIP):
+5.6.4:
 -Hopefully fix voltage for "faster" binned chips
 -Fixed random reboots when using intellidemand governor
 -Fix scripts
