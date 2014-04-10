@@ -31,3 +31,9 @@ Changelog
 -Update to Linux 3.4.79
 -Add LZ4 kernel compression/decompression for faster boot
 
+5.7.6 (WIP):
+-Enable Linaro's power-efficient workqueues
+-Merges from CM's M7 kernel
+-Optimize BFQ I/O Schedule for SSDs
+-Various small optimizations
+
