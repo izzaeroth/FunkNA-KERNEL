@@ -36,4 +36,5 @@ Changelog
 -Merges from CM's M7 kernel
 -Optimize BFQ I/O Schedule for SSDs
 -Various small optimizations
+-Update to Linux 3.4.86
 
