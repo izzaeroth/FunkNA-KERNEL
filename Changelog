@@ -31,7 +31,10 @@ Changelog
 -Update to Linux 3.4.79
 -Add LZ4 kernel compression/decompression for faster boot
 
-5.7.6 (WIP):
+5.7.6:
+-NOTE: There are 2 different zips for this version to avoid conflicts between crpalmer's simple plug and faux123's intelliplug. 
+-IMPORTANT: On the intelliplug version, intelliplug is enabled by default. If you disable intelliplug, there will be no hotplug driver running which will kill your battery quickly. So if you decide you don't want to use intellidemand, please use the simple plug version instead.
+-Memory optimizations from Motorola
 -Enable Linaro's power-efficient workqueues
 -Intelliplug updates
 -Merge latest CM commits
