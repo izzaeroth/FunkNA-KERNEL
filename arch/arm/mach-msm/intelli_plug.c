@@ -13,6 +13,7 @@
  * GNU General Public License for more details.
  *
  */
+#include "intelli_plug.h"
 #include <linux/earlysuspend.h>
 #include <linux/workqueue.h>
 #include <linux/cpu.h>
@@ -48,7 +49,6 @@ static struct delayed_work intelli_plug_boost;
 static struct workqueue_struct *intelliplug_wq;
 static struct workqueue_struct *intelliplug_boost_wq;
 
-static unsigned int intelli_plug_active = 0;
 module_param(intelli_plug_active, uint, 0644);
 
 static unsigned int eco_mode_active = 0;

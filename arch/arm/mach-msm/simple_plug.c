@@ -17,6 +17,7 @@
 
 #define PR_NAME "simple_plug: "
 
+#include "intelli_plug.h"
 #include <linux/earlysuspend.h>
 #include <linux/workqueue.h>
 #include <linux/cpu.h>
@@ -33,9 +34,14 @@
 #define HISTORY_SIZE			10
 #define NUM_CORES			4
 
+#define INTELLI_PLUG_DELAY_MS		200000
+
 static struct delayed_work simple_plug_work;
 
 static unsigned int simple_plug_active = 1;
+
+int intelli_plug_active = 0;
+
 static unsigned int min_cores = 1;
 static unsigned int max_cores = NUM_CORES;
 static unsigned int sampling_ms = DEF_SAMPLING_MS;
@@ -213,7 +219,7 @@ static void __cpuinit simple_plug_work_fn(struct work_struct *work)
 	}
 #endif
 	
-	if (simple_plug_active == 1) {
+	if (simple_plug_active == 1 && intelli_plug_active == 0) {
 		int cores = desired_number_of_cores();
 		if (verify_needed) {
 			if (--n_until_verify == 0) {
@@ -224,16 +230,25 @@ static void __cpuinit simple_plug_work_fn(struct work_struct *work)
 		}
 	}
 
-	schedule_delayed_work_on(0, &simple_plug_work,
-		msecs_to_jiffies(sampling_ms));
+	if (intelli_plug_active == 0) {
+		schedule_delayed_work_on(0, &simple_plug_work,
+			msecs_to_jiffies(sampling_ms));
+	} else {
+		schedule_delayed_work_on(0, &simple_plug_work,
+			msecs_to_jiffies(INTELLI_PLUG_DELAY_MS));
+	}
 }
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 
 static void __cpuinit simple_plug_early_suspend(struct early_suspend *handler)
 {
-	cancel_delayed_work_sync(&simple_plug_work);
-	verify_cores(1);
+	if (intelli_plug_active == 0) {
+		cancel_delayed_work_sync(&simple_plug_work);
+		verify_cores(1);
+	} else {
+		return;
+	}
 }
 
 static void __cpuinit simple_plug_late_resume(struct early_suspend *handler)
@@ -259,8 +274,13 @@ static void __cpuinit simple_plug_late_resume(struct early_suspend *handler)
 
 	verify_needed = true;
 	n_until_verify = 1;
-	schedule_delayed_work_on(0, &simple_plug_work,
-		msecs_to_jiffies(1));
+	if (intelli_plug_active == 0) {
+		schedule_delayed_work_on(0, &simple_plug_work,
+			msecs_to_jiffies(1));
+	} else {
+		schedule_delayed_work_on(0, &simple_plug_work,
+			msecs_to_jiffies(INTELLI_PLUG_DELAY_MS));
+	}
 }
 
 static struct early_suspend simple_plug_early_suspend_struct_driver = {
@@ -294,9 +314,13 @@ static int __init simple_plug_init(void)
 	 * We will then immediately force the state that we want onto the system.
 	 */
 	
-	INIT_DELAYED_WORK(&simple_plug_work, simple_plug_work_fn);
-	schedule_delayed_work_on(0, &simple_plug_work, msecs_to_jiffies(STARTUP_DELAY_MS));
-
+	if (intelli_plug_active == 0) {
+		INIT_DELAYED_WORK(&simple_plug_work, simple_plug_work_fn);
+		schedule_delayed_work_on(0, &simple_plug_work, msecs_to_jiffies(STARTUP_DELAY_MS));
+	} else {
+		INIT_DELAYED_WORK(&simple_plug_work, simple_plug_work_fn);
+		schedule_delayed_work_on(0, &simple_plug_work, msecs_to_jiffies(INTELLI_PLUG_DELAY_MS));
+	}
 	return 0;
 }
 
