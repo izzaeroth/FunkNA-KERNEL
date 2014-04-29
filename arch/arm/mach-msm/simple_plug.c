@@ -40,8 +40,6 @@ static struct delayed_work simple_plug_work;
 
 static unsigned int simple_plug_active = 1;
 
-int intelli_plug_active = 0;
-
 static unsigned int min_cores = 1;
 static unsigned int max_cores = NUM_CORES;
 static unsigned int sampling_ms = DEF_SAMPLING_MS;
