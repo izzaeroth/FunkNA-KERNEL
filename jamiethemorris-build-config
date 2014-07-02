@@ -1,4 +1,4 @@
-CROSS_COMPILE=/home/jamiethemorris/arm-cortex_a15-linux-gnueabihf-linaro_4.8.3-2014.02/bin/arm-cortex_a15-linux-gnueabihf-
+CROSS_COMPILE=/home/jamiethemorris/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1-2014.04/bin/arm-cortex_a15-linux-gnueabihf-
 HOST_CC=gcc
 LOCAL_BUILD_DIR=dna
 TARGET_DIR=~/dna/updates
@@ -9,7 +9,7 @@ FLASH_BOOT='write_raw_image("/tmp/boot.img", "boot")'
 # ----
 
 N_CORES=8
-VERSION=crpalmer-5.7.6_jamiethemorris
+VERSION=crpalmer-5.7.7_jamiethemorris
 
 # ----
 
