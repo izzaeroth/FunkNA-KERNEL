@@ -129,7 +129,7 @@ EXPORT_SYMBOL_GPL(ehci_hsic_is_2nd_enum_done);
 extern int subsystem_restart(const char *name);
 struct msm_hsic_hcd *__mehci;
 
-static bool debug_bus_voting_enabled = true;
+static bool debug_bus_voting_enabled = false;
 
 static unsigned int enable_dbg_log = 0;
 module_param(enable_dbg_log, uint, S_IRUGO | S_IWUSR);
@@ -763,7 +763,7 @@ static int msm_hsic_reset(struct msm_hsic_hcd *mehci)
 	return 0;
 }
 
-#define PHY_SUSPEND_TIMEOUT_USEC	(500 * 1000)
+#define PHY_SUSPEND_TIMEOUT_USEC	(200 * 1000)
 #define PHY_RESUME_TIMEOUT_USEC		(100 * 1000)
 
 #ifdef CONFIG_PM_SLEEP
@@ -1658,6 +1658,8 @@ static int __devinit ehci_hsic_msm_probe(struct platform_device *pdev)
 	}
 	hcd_to_bus(hcd)->skip_resume = true;
 
+	hcd_to_bus(hcd)->skip_resume = true;
+
 	hcd->irq = platform_get_irq(pdev, 0);
 	if (hcd->irq < 0) {
 		dev_err(&pdev->dev, "Unable to get IRQ resource\n");
@@ -1934,6 +1936,16 @@ static int msm_hsic_pm_resume(struct device *dev)
 	  if (!atomic_read(&mehci->pm_usage_cnt) &&
                        pm_runtime_suspended(dev))
           return 0;
+
+	/*
+	 * Keep HSIC in Low Power Mode if system is resumed
+	 * by any other wakeup source.  HSIC is resumed later
+	 * when remote wakeup is received or interface driver
+	 * start I/O.
+	 */
+	if (!atomic_read(&mehci->pm_usage_cnt) &&
+			pm_runtime_suspended(dev))
+		return 0;
 
 	ret = msm_hsic_resume(mehci);
 	if (ret)
