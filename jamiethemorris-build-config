@@ -15,5 +15,5 @@ VERSION=crpalmer-5.7.7.1_jamiethemorris
 
 BANNER=`cat <<EOF
 ui_print("jamiethemorris's HTC Droid DNA Kernel");
-ui_print("==> Sense based ROMs");
+ui_print("==> CM 11.0 based ROMs");
 EOF`
