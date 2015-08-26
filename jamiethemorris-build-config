@@ -1,19 +1,19 @@
-CROSS_COMPILE=/home/jamiethemorris/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1-2014.04/bin/arm-cortex_a15-linux-gnueabihf-
+CROSS_COMPILE=/
 HOST_CC=gcc
 LOCAL_BUILD_DIR=dna
 TARGET_DIR=~/dna/updates
 SYSTEM_PARTITION="/dev/block/mmcblk0p32"
-DEFCONFIG=jamiethemorris_defconfig
+DEFCONFIG=funkna_defconfig
 FLASH_BOOT='write_raw_image("/tmp/boot.img", "boot")'
 
 # ----
 
 N_CORES=8
-VERSION=crpalmer-6.0.1_jamiethemorris
+VERSION=FunkNA-1.0
 
 # ----
 
 BANNER=`cat <<EOF
-ui_print("jamiethemorris's HTC Droid DNA Kernel");
-ui_print("==> CM 12.0 based ROMs");
+ui_print("FunkNA HTC Droid DNA Kernel");
+ui_print("==> CM 12.1 based ROMs");
 EOF`
