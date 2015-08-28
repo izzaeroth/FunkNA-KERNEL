@@ -1029,12 +1029,10 @@ config TOUCHSCREEN_SYNAPTICS_SWEEP2WAKE
 	
 config TOUCHSCREEN_DOUBLETAP2WAKE
 	tristate "DoubleTap2Wake for touchscreens"
-	string "DoubleTap2Wake magic"
-	default n
+	default y
 
 config POCKET_DETECT
         tristate "Pocket_detect for touchscreens"
-        string "Pocket_detect protection"
-        default n
+        default y
 
 endif
